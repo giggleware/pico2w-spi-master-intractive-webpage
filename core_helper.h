@@ -53,9 +53,11 @@ void core1_main()
 
     while (1)
     {
-        // printf("MASTER CORE1\n");
-        cyw43_arch_poll(); // MUST call frequently
-        sleep_ms(1);
+        // if you are using pico_cyw43_arch_poll, you must call this regularly
+        cyw43_arch_poll();
+
+        // You can wait efficiently until there's work to do
+        cyw43_arch_wait_for_work_until(make_timeout_time_ms(1000));
     }
 }
 #endif

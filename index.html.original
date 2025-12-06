@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+    <meta charset='utf-8'>
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Pico 2W Slave Monitor</title>
+    <link rel='stylesheet' href='/main.css'>
+</head>
+
+<body>
+    <header>
+        <h1>Pico 2W Slave Monitor</h1>
+        <button id='themeToggle' aria-label='Toggle theme'>🌙</button>
+    </header>
+    <div id='loader'>
+        <div></div>
+    </div>
+    <main style='opacity:0;'>
+        <section class='card'>
+            <div class='value-label'>Slave Value</div>
+            <div id='valueDisplay' class='value'>0</div>
+        </section>
+        <canvas id='graphCanvas'></canvas>
+    </main>
+    <script src='/app.js'></script>
+</body>
+
+</html>

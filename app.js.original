@@ -1,0 +1,25 @@
+console.log('JavaScript file loaded!');
+
+let valueDisplay = document.getElementById('valueDisplay');
+let canvas = document.getElementById('graphCanvas');
+let ctx = canvas.getContext('2d');
+let values = []; let main = document.querySelector('main'); let loader = document.getElementById('loader');
+function resizeCanvas() { canvas.width = canvas.clientWidth; canvas.height = canvas.clientHeight } resizeCanvas(); window.addEventListener('resize', resizeCanvas);
+function drawGraph() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); if (values.length < 2) return; ctx.beginPath(); ctx.lineWidth = 2;
+    ctx.strokeStyle = getComputedStyle(document.body).getPropertyValue('--accent'); let step = canvas.width / (values.length - 1); ctx.moveTo(0, canvas.height - values[0]);
+    for (let i = 1; i < values.length; i++) { ctx.lineTo(i * step, canvas.height - values[i]) } ctx.stroke()
+}
+let currentDisplayValue = 0;
+function animateValue(newVal) { valueDisplay.style.transform = 'scale(1.2)'; setTimeout(() => valueDisplay.style.transform = 'scale(1.0)', 150); currentDisplayValue = newVal; valueDisplay.innerText = newVal }
+async function updateValue() {
+    try {
+        let r = await fetch('/value'); let j = await r.json(); let v = j.value; animateValue(v); values.push(v % canvas.height); if (values.length > 200) values.shift(); drawGraph();
+        if (loader.style.display !== 'none') { loader.style.display = 'none'; main.style.opacity = '1'; }
+    } catch (e) { console.log('fetch error', e) }
+}
+setInterval(updateValue, 200);
+function sendCommand(cmd) { fetch('/control', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ command: cmd }) }) }
+function sendCustomCommand() { let v = parseInt(document.getElementById('customCmd').value); if (!isNaN(v)) sendCommand(v) }
+let toggle = document.getElementById('themeToggle'); function applyTheme(t) { document.body.classList.toggle('dark', t === 'dark'); toggle.innerText = (t === 'dark') ? '☀️' : '🌙' }
+let saved = localStorage.getItem('theme') || 'light'; applyTheme(saved); toggle.onclick = () => { let nt = document.body.classList.contains('dark') ? 'light' : 'dark'; localStorage.setItem('theme', nt); applyTheme(nt) }

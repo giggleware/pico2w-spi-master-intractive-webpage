@@ -205,3 +205,18 @@ window.addEventListener('load', () => {
     mainEl.style.opacity = 1;
     pollValue();
 });
+
+// ----- Theme Toggle -----
+const themeToggle = document.getElementById("themeToggle");
+
+themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+
+    // Change the icon
+    if (document.body.classList.contains("dark")) {
+        themeToggle.textContent = "☀️";  // sun icon
+    } else {
+        themeToggle.textContent = "🌙";  // moon icon
+    }
+});
+
